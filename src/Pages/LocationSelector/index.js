@@ -9,6 +9,8 @@ import {
   getCountryList,
   getLocationDetails,
 } from "../../redux/location/actions";
+import { blue } from "@mui/material/colors";
+import LocationDetails from "./LocationDetails";
 
 const convertToOptions = (countries) => {
   return countries.map((country) => ({
@@ -32,6 +34,7 @@ const LocationSelector = (props) => {
   const [countries, setCountries] = React.useState([]);
   const [cities, setCities] = React.useState([]);
   const [locations, setLocations] = React.useState([]);
+  const [locationdetails, setLocationdetails] = React.useState(null);
 
   useEffect(() => {
     if (props.location && !props.location.country) {
@@ -52,12 +55,20 @@ const LocationSelector = (props) => {
   }, [props.location.city]);
   useEffect(() => {
     if (props.location && props.location.location) {
-      console.log("location");
       setLocations(ConvertLocations(props.location.location.results));
     }
   }, [props.location.location]);
+  useEffect(() => {
+    if (props.location && props.location.locationDetails) {
+      console.log("worksssssssss");
+      setLocationdetails(props.location.locationDetails.results);
+    }
+  }, [props.location.locationDetails]);
 
   const handleCountryChange = (value) => {
+    setCities([]);
+    setLocations([]);
+    setLocationdetails(null);
     if (value !== null) {
       props.getCityList({ data: value.value });
     } else {
@@ -66,6 +77,7 @@ const LocationSelector = (props) => {
   };
 
   const handleCityChange = (value) => {
+    setLocationdetails(null);
     if (value !== null) {
       props.getLocationList({ data: value.value });
     } else {
@@ -84,17 +96,18 @@ const LocationSelector = (props) => {
     <>
       <Paper elevation={3} sx={{ padding: 5, marginBottom: 3 }}>
         <Grid container spacing={3}>
-          <Grid item xs={6} sx={{ textAlign: "left" }}>
+          <Grid item md={6} sx={{ textAlign: "left" }}>
             <Typography variant="h6">Search Location</Typography>
           </Grid>
           {cities.length > 0 && (
-            <Grid item xs={6} sx={{ textAlign: "right" }}>
+            <Grid item md={6} sx={{ textAlign: "right" }}>
               <Button
                 variant="outlined"
                 color="primary"
                 onClick={() => {
                   setCities([]);
                   setLocations([]);
+                  setLocationdetails(null);
                 }}
               >
                 Reset
@@ -107,8 +120,6 @@ const LocationSelector = (props) => {
           id="combo-box-demo"
           onChange={(event, value) => {
             handleCountryChange(value);
-            setCities([]);
-            setLocations([]);
           }}
           options={countries}
           sx={{ width: "100%", marginY: 5 }}
@@ -118,6 +129,7 @@ const LocationSelector = (props) => {
         />
         {cities.length > 0 && (
           <Autocomplete
+            disablePortal
             id="combo-box-demo-2"
             onChange={(event, value) => {
               handleCityChange(value);
@@ -132,6 +144,7 @@ const LocationSelector = (props) => {
         )}
         {locations.length > 0 && (
           <Autocomplete
+            disablePortal
             id="combo-box-demo-2"
             onChange={(event, value) => {
               handleLocationChange(value);
@@ -144,7 +157,20 @@ const LocationSelector = (props) => {
           />
         )}
       </Paper>
-      <Paper elevation={3} sx={{ padding: 5, marginBottom: 3 }}></Paper>
+      {locationdetails !== null &&
+        props.location &&
+        props.location.locationDetails && (
+          <Paper elevation={3} sx={{ marginBottom: 3 }}>
+            {props.location && props.location.listloading ? (
+              <Typography variant="h6">Loading......</Typography>
+            ) : (
+             <LocationDetails
+             locationdetails={locationdetails}
+             
+             />
+            )}
+          </Paper>
+        )}
     </>
   );
 };

@@ -38,9 +38,9 @@ export default function ElevateAppBar(props) {
     <React.Fragment>
       <CssBaseline />
       <ElevationScroll {...props}>
-        <AppBar color='default'>
+        <AppBar>
           <Toolbar>
-            <Typography variant="h6" component="div">
+            <Typography variant="h6" component="div" color='white'>
               Pollution Monitoring App
             </Typography>
           </Toolbar>

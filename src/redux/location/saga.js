@@ -65,7 +65,7 @@ function* LocationDetails({payload:data}) {
       "Content-Type": "application/json",
     },
     method: "GET",
-    url: endpoints.locationURL+`/latest/${value.data}`,
+    url: endpoints.locationURL+`/locations/${value.data}`,
   };
 
   try {
