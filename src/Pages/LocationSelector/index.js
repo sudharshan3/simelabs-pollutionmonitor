@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { connect } from "react-redux";
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import {
   getLocationList,
   getCityList,
@@ -157,20 +159,23 @@ const LocationSelector = (props) => {
           />
         )}
       </Paper>
-      {locationdetails !== null &&
-        props.location &&
-        props.location.locationDetails && (
-          <Paper elevation={3} sx={{ marginBottom: 3 }}>
-            {props.location && props.location.listloading ? (
-              <Typography variant="h6">Loading......</Typography>
-            ) : (
-             <LocationDetails
-             locationdetails={locationdetails}
-             
-             />
+
+      <Paper elevation={3} sx={{ marginBottom: 3 }}>
+        {props.location && props.location.listloading ? (
+          <Box sx={{ padding: 3,textAlign:'center' }} >
+
+          <Skeleton sx={{ height:50,width: '80%' ,margin:'auto'}} animation="wave" />
+         
+   
+        </Box>
+        ) : (
+          <>
+            {locationdetails !== null && (
+              <LocationDetails locationdetails={locationdetails} />
             )}
-          </Paper>
+          </>
         )}
+      </Paper>
     </>
   );
 };

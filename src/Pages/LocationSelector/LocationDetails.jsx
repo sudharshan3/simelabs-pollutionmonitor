@@ -1,20 +1,26 @@
-import { Divider, Grid, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { lightBlue, grey, pink } from "@mui/material/colors";
 import { Box } from "@mui/system";
-import React from "react";
-import moment from 'moment';
+import moment from "moment";
+import DatewiseData from "./DatewiseData";
 const LocationDetails = (props) => {
   const { locationdetails } = props;
-  const changeDateformat=(e)=>{
-        
-
-    let newDate2 =moment(e).format("MMM Do, YYYY hh:mm A ")
-            return newDate2
-        }
+  const [chartModal, setChartModal] = useState(false);
+  const changeDateformat = (e) => {
+    let newDate2 = moment(e).format("MMM Do, YYYY hh:mm A ");
+    return newDate2;
+  };
+  const closechartModal = () => {
+    setChartModal(false);
+  };
+  const openChartData = () => {
+    setChartModal(true);
+  };
   return (
     <>
       <Paper sx={{ padding: 3, bgcolor: `${lightBlue[500]}` }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{alignItems:'center'}}>
           <Grid item md={6} sx={{ textAlign: "left" }}>
             <Typography color="white" variant="h4">
               {locationdetails[0].name}
@@ -23,21 +29,34 @@ const LocationDetails = (props) => {
               {locationdetails[0].city} , {locationdetails[0].country}
             </Typography>
           </Grid>
+          <Grid item md={6} sx={{ textAlign: "right", paddingY: "auto" }}>
+            <Button
+            disableElevation
+            size='lg'
+              onClick={() => {
+                openChartData();
+              }}
+              variant="contained"
+              color="secondary"
+            >
+              Date Wise Data
+            </Button>
+          </Grid>
         </Grid>
       </Paper>
       <Box sx={{ padding: 3 }}>
         <Grid container spacing={2}>
-          <Grid item md={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             <Paper
               variant="outlined"
               sx={{ padding: 2, bgcolor: `${pink[50]}`, textAlign: "left" }}
             >
               <Typography variant="h6">Details</Typography>
-              <Typography sx={{color:`${pink[500]}`}} variant="h4">
+              <Typography sx={{ color: `${pink[500]}` }} variant="h4">
                 {locationdetails[0].measurements}
               </Typography>
               <Typography variant="button">Measurements</Typography>
-              <Divider sx={{marginY:2}} />
+              <Divider sx={{ marginY: 2 }} />
               <Typography
                 sx={{ color: `${grey[600]}` }}
                 variant="caption"
@@ -59,41 +78,47 @@ const LocationDetails = (props) => {
           </Grid>
           {locationdetails[0].parameters.map((val, index) => {
             return (
-              <Grid item md={12} lg={4}>
+              <Grid item xs={12} lg={4}>
                 <Paper
                   variant="outlined"
-                  sx={{ padding: 2, bgcolor: `${lightBlue[50]}`, textAlign: "left" }}
+                  sx={{
+                    padding: 2,
+                    bgcolor: `${lightBlue[50]}`,
+                    textAlign: "left",
+                  }}
                 >
                   <Typography variant="h6">{val.parameter}</Typography>
                   <Typography color="primary" variant="h4">
                     {val.lastValue}
                   </Typography>
                   <Typography variant="button"> {val.unit}</Typography>
-                  <Divider sx={{marginY:2}} />
-              <Typography
-                sx={{ color: `${grey[600]}` }}
-                variant="caption"
-                display="block"
-                gutterBottom
-              >
-               Last Updated
-              </Typography>
-              <Typography
-                sx={{ color: `${grey[600]}` }}
-                variant="caption"
-                display="block"
-                gutterBottom
-              >
-                  
-                {changeDateformat(locationdetails[0].lastUpdated)} 
-              
-              </Typography>
+                  <Divider sx={{ marginY: 2 }} />
+                  <Typography
+                    sx={{ color: `${grey[600]}` }}
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                  >
+                    Last Updated
+                  </Typography>
+                  <Typography
+                    sx={{ color: `${grey[600]}` }}
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                  >
+                    {changeDateformat(locationdetails[0].lastUpdated)}
+                  </Typography>
                 </Paper>
               </Grid>
             );
           })}
         </Grid>
       </Box>
+      <DatewiseData
+      chartModal={chartModal}
+      closechartModal={closechartModal}
+      />
     </>
   );
 };
