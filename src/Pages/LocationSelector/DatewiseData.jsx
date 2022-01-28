@@ -6,6 +6,7 @@ import {
   Paper,
   Typography,
   Container,
+  Skeleton,
 } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -18,14 +19,35 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import ChartTabs from "./ChartTabs";
-
+import { connect } from "react-redux";
+import { getChartList } from "../../redux/chart/actions";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DatewiseData(props) {
+const DatewiseData = (props) => {
   const [value, setValue] = React.useState(new Date());
-
+  const[paramindex,setParamindex]=React.useState('')
+  React.useEffect(() => {
+    if (props.data && props.chart) {
+      let data = {
+        date: value.toISOString().split('T')[0],
+        parameter:props.data.parameters[0].parameter,
+        location:props.data.id
+      };
+      props.getChartList(data);
+    }
+  }, [props.data]);
+  React.useEffect(() => {
+    if (props.data && props.chart && props.chart.chart) {
+      let data = {
+        date: value.toISOString().split('T')[0],
+        parameter:paramindex || props.data.parameters[0].parameter,
+        location:props.data.id
+      };
+      props.getChartList(data);
+    }
+  }, [value]);
   return (
     <div>
       <Dialog
@@ -80,11 +102,22 @@ export default function DatewiseData(props) {
               </Grid>
             </Grid>
           </Paper>
-          <Paper variant="outlined" sx={{ marginY: 3,}}>
-              <ChartTabs/>
-          </Paper>
+      
+          {props.chart && (
+                  <Paper variant="outlined" sx={{ marginY: 3 }}>
+                  <ChartTabs chartdata={props.chart} data={props.data} value={value} getChartList={props.getChartList}  setParamindex={setParamindex}/>
+                </Paper>
+          )}
+    
         </Container>
       </Dialog>
     </div>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    chart: state.Chart,
+  };
+};
+export default connect(mapStateToProps, { getChartList })(DatewiseData);

@@ -7,15 +7,18 @@ import DatewiseData from "./DatewiseData";
 const LocationDetails = (props) => {
   const { locationdetails } = props;
   const [chartModal, setChartModal] = useState(false);
+  const[data,setData]=useState(null)
   const changeDateformat = (e) => {
     let newDate2 = moment(e).format("MMM Do, YYYY hh:mm A ");
     return newDate2;
   };
   const closechartModal = () => {
     setChartModal(false);
+    setData(null)
   };
   const openChartData = () => {
     setChartModal(true);
+    setData(locationdetails[0])
   };
   return (
     <>
@@ -116,6 +119,7 @@ const LocationDetails = (props) => {
         </Grid>
       </Box>
       <DatewiseData
+      data={data}
       chartModal={chartModal}
       closechartModal={closechartModal}
       />
