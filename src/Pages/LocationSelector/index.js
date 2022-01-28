@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -13,6 +13,7 @@ import {
 } from "../../redux/location/actions";
 import { blue } from "@mui/material/colors";
 import LocationDetails from "./LocationDetails";
+import ElevateAppBar from "../../components/AppBar";
 
 const convertToOptions = (countries) => {
   return countries.map((country) => ({
@@ -96,7 +97,9 @@ const LocationSelector = (props) => {
 
   return (
     <>
-      <Paper elevation={3} sx={{ padding: 5, marginBottom: 3 }}>
+   <ElevateAppBar />
+ <Container sx={{marginTop:'2rem'}}>
+ <Paper elevation={3} sx={{ padding: 5, marginBottom: 3 }}>
         <Grid container spacing={3}>
           <Grid item md={6} sx={{ textAlign: "left" }}>
             <Typography variant="h6">Search Location</Typography>
@@ -176,6 +179,8 @@ const LocationSelector = (props) => {
           </>
         )}
       </Paper>
+ </Container>
+     
     </>
   );
 };

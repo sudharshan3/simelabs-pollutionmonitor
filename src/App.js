@@ -1,17 +1,21 @@
 import logo from "./logo.svg";
 import "./App.css";
-import ElevateAppBar from "./components/AppBar";
-import { Container } from "@mui/material";
 import LocationSelector from "./Pages/LocationSelector";
-
+import {
+  HashRouter as Router,
+  Navigate,
+  Routes,
+  Switch,
+  Route,
+} from "react-router-dom";
 function App() {
   return (
-    <div className="App">
-      <ElevateAppBar />
-      <Container sx={{marginTop:'2rem'}}>
-        <LocationSelector/>
-      </Container>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route exact path="/home" element={<LocationSelector />} />
+      </Routes>
+    </Router>
   );
 }
 
